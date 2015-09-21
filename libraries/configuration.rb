@@ -66,9 +66,13 @@ module Configuration
     end.join("\n")
   end
 
-  def exports_config obj
+  def exports_config obj, header=nil
     obj.map do |k, v|
-      "export #{k}=#{Shellwords.escape v.to_s}"
+      if k.nil? || k.is_a?(Integer)
+        v.to_s
+      else
+        "export #{k}=#{Shellwords.escape v.to_s}"
+      end
     end.join("\n")
   end
 

@@ -254,6 +254,7 @@ end
 
 
 node.default['configurator']['test']['exports'] = {
+  nil => '#!/bin/sh',
   'this' => nil,
   'is' => 10,
   'a' => :nother,
@@ -266,6 +267,7 @@ end
 
 file '/tmp/expect/exports.conf.expect' do
   content %Q$
+    #!/bin/sh
     export this=''
     export is=10
     export a=nother
