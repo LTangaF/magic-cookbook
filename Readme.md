@@ -185,10 +185,13 @@ foo=bar
 
 ### Logstash
 
+**N.B.** The name of this generator changed in `v1.2` from `logstash_config`
+to `logstash_typed_config` to avoid a namespace collision (per Issue #5).
+
 Converts a Hash to Logstash-style configuration:
 
 ```ruby
-logstash_config({
+logstash_typed_config({
   'input' => {
     'test' => {
       'file' => {

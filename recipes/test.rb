@@ -103,7 +103,7 @@ node.default['configurator']['test']['logstash']['output'] = {
 }
 
 file '/tmp/expect/logstash.conf' do
-  content logstash_config(node.default['configurator']['test']['logstash'])
+  content logstash_typed_config(node.default['configurator']['test']['logstash'])
 end
 
 file '/tmp/expect/logstash.conf.expect' do
@@ -145,7 +145,7 @@ node.default['configurator']['test']['logstash_conditional_output'] = {
 }
 
 file '/tmp/expect/logstash_conditional_output.conf' do
-  content logstash_config(node.default['configurator']['test']['logstash_conditional_output'])
+  content logstash_typed_config(node.default['configurator']['test']['logstash_conditional_output'])
 end
 
 file '/tmp/expect/logstash_conditional_output.conf.expect' do

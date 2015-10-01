@@ -141,7 +141,7 @@ module Configuration
     end
   end
 
-  def logstash_config obj
+  def logstash_typed_config obj
     tpl = %Q$
       input {
       <% obj['input'].each do |type, inputs| %>
