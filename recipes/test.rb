@@ -378,3 +378,40 @@ file '/tmp/expect/inline.conf.expect' do
     3
   $.strip.gsub(/^    /, '')
 end
+
+
+
+node.default['configurator']['test']['logrotate'] = {
+  nil => { # global
+    'size' => '1G',
+    'compress' => nil,
+    'delaycompress' => nil,
+    'copytruncate' => nil,
+    'notifempty' => nil,
+    'missingok' => nil
+  },
+  '/var/log/example.log' => {
+    'daily' => nil,
+    'rotate' => 7,
+  }
+}
+
+file '/tmp/expect/logrotate.conf' do
+  content logrotate_config(node.default['configurator']['test']['logrotate'])
+end
+
+file '/tmp/expect/logrotate.conf.expect' do
+  content %Q$
+    size 1G
+    compress
+    delaycompress
+    copytruncate
+    notifempty
+    missingok
+
+    /var/log/example.log {
+      daily
+      rotate 7
+    }
+  $.strip.gsub(/^    /, '')
+end
