@@ -262,44 +262,6 @@ export test=1234
 ```
 
 
-### Logrotate
-
-Converts a two-level hash into `logrotate`-style configuration:
-
-```ruby
-logrotate_config({
-  nil => { # global
-    'size' => '1G',
-    'compress' => nil,
-    'delaycompress' => nil,
-    'copytruncate' => nil,
-    'notifempty' => nil,
-    'missingok' => nil
-  },
-  '/var/log/example.log' => {
-    'daily' => nil,
-    'rotate' => 7,
-  }
-})
-```
-
-Generates:
-
-```
-size 1G
-compress
-delaycompress
-copytruncate
-notifempty
-missingok
-
-/var/log/example.log {
-  daily
-  rotate 7
-}
-```
-
-
 
 ## Materialization
 

@@ -190,28 +190,6 @@ module Configuration
     $.strip.gsub(/^      /, '')
     ERB.new(tpl).result(binding).gsub(/(\n\s*)+?\n/, "\n")
   end
-
-
-  def logrotate_config options
-    output = []
-
-    options.each do |file, policies|
-      if file
-        output << '%s {' % file
-        spacer = '  '
-      end
-
-      policies.each do |name, value|
-        policy = '%s%s %s' % [ spacer, name, value ]
-        output << policy.rstrip
-      end
-
-      output << '}' if file
-      output << ''
-    end
-
-    output.join("\n").lstrip
-  end
 end
 
 class Chef
