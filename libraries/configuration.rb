@@ -124,6 +124,59 @@ module Configuration
     end
   end
 
+  def erlang_config obj
+    config = erlang_hash_to_proplist obj
+    config += "."
+  end
+
+  def erlang_array_config config_array, indent = 0
+    config_string = "#{make_indent indent}[\n"
+    config_item_strings = []
+    config_array.each do | config_item |
+      config_item_strings << erlang_array_item_config(config_item, indent + 1)
+    end
+    config_string += config_item_strings.join(",\n")
+    config_string += "\n#{make_indent indent}]"
+  end
+
+  def erlang_array_item_config config, indent = 0
+    if config.is_a? Hash
+      erlang_hash_to_proplist config, indent
+    elsif config.is_a? Array
+      erlang_array_config config, indent
+    else
+      "#{make_indent indent}#{config}"
+    end
+  end
+
+  def erlang_hash_to_proplist config, indent = 0
+    key_config = "#{make_indent indent}[\n"
+    configs = []
+    config.each do | config_key, config_value |
+      configs << erlang_key_config(config_key, config_value, indent + 1)
+    end
+    key_config += configs.join(",\n")
+    key_config += "\n#{make_indent indent}]"
+  end
+
+  def erlang_key_config key, config, indent = 0
+    if config.is_a? Hash
+      key_config = "#{make_indent indent}{ #{key},\n"
+      key_config += erlang_hash_to_proplist(config, indent + 1)
+      key_config += "\n#{make_indent indent}}"
+    elsif config.is_a? Array
+      key_config = "#{make_indent indent}{ #{key},\n"
+      key_config += erlang_array_config(config, indent + 1)
+      key_config += "\n#{make_indent indent}}"
+    else
+      "#{make_indent indent}{ #{key}, #{config} }"
+    end
+  end
+
+  def make_indent indent
+    "  " * indent
+  end
+
   def quote_logstash obj
     case obj.class.to_s
     when /Array/
