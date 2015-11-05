@@ -379,39 +379,59 @@ file '/tmp/expect/inline.conf.expect' do
   $.strip.gsub(/^    /, '')
 end
 
-
-
-node.default['configurator']['test']['logrotate'] = {
-  nil => { # global
-    'size' => '1G',
-    'compress' => nil,
-    'delaycompress' => nil,
-    'copytruncate' => nil,
-    'notifempty' => nil,
-    'missingok' => nil
+erlang_hash = {
+  "app_a" => {
+    "atom_key" => {
+      "hash_value_key" => '"string value"',
+      "hash_value_key2" => '<<"binary value">>'
+    },
+    "another_key" => [
+      {
+        "proplist_key" => "proplist_value",
+        "proplist_key2" => "proplist_value2"
+      },
+      "some_atom",
+      '<<"some_binary">>'
+    ]
   },
-  '/var/log/example.log' => {
-    'daily' => nil,
-    'rotate' => 7,
+  "app_b" => {
+   "some_key" => 88
   }
 }
 
-file '/tmp/expect/logrotate.conf' do
-  content logrotate_config(node.default['configurator']['test']['logrotate'])
+file '/tmp/expect/erlang.config' do
+  content erlang_config(erlang_hash)
 end
 
-file '/tmp/expect/logrotate.conf.expect' do
+file '/tmp/expect/erlang.config.expect' do
   content %Q$
-    size 1G
-    compress
-    delaycompress
-    copytruncate
-    notifempty
-    missingok
-
-    /var/log/example.log {
-      daily
-      rotate 7
-    }
+    [
+      { app_a,
+        [
+          { atom_key,
+            [
+              { hash_value_key, "string value" },
+              { hash_value_key2, <<"binary value">> }
+            ]
+          },
+          { another_key,
+            [
+              [
+                { proplist_key, proplist_value },
+                { proplist_key2, proplist_value2 }
+              ],
+              some_atom,
+              <<"some_binary">>
+            ]
+          }
+        ]
+      },
+      { app_b,
+        [
+          { some_key, 88 }
+        ]
+      }
+    ].
   $.strip.gsub(/^    /, '')
 end
+
