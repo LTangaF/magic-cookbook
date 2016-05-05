@@ -1,7 +1,7 @@
 module Reification
   def reify resource, spec, notifications=[], actions=[]
     spec = ::Mash.new(spec.to_hash)
-    raise 'Provide a name to reify your spec' unless spec.key? :name
+    raise 'Provide a name to reify your spec' unless spec.key?('name')
     name = spec.delete 'name'
 
     send resource.to_sym, name do
