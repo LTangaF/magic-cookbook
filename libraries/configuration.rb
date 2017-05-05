@@ -200,7 +200,10 @@ module Configuration
       <% obj['input'].each do |type, inputs| %>
       <% inputs.each do |name, config| %>
         <%= name %> {<% config.each do |k, v| %>
-          <%= k %> => <%= quote_logstash v %><% end %>
+          <% if k =~ /^codec\$/i && v.is_a?(Hash) %><%= k %> => <%= v.keys.first %> {<% v[v.keys.first].each do |k2, v2| %>
+            <%= k2 %> => <%= quote_logstash v2 %><% end %>
+          }
+          <% else %><%= k %> => <%= quote_logstash v %><% end %><% end %>
           <% if type.is_a?(String) %>type => <%= quote_logstash type %><% end %>
         }
       <% end %><% end %>
